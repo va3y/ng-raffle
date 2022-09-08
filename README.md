@@ -1,6 +1,38 @@
 # NgRaffle
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.1.
+## Features
+
+* Ui Kit is encapsulated into its own lib
+* As a project is simple, no ready-made kit was used. The styles are done with TailwindCSS
+* The db is hosted by planetscale, connection in dev is done via secrets
+* The simple backend is done by serverless functions on Vercel
+* NgRx is used for state management, including @ngrx/data extension
+* The components are implemented as standalone to cut boilerplate code
+
+## Todo 
+
+- [ ] Create a ui-kit library boilerplate
+- [ ] Style basic components: 
+  - [ ] Button
+  - [ ] Input text
+  - [ ] Radio
+  - [ ] File dropzone
+- [ ] Create a form template
+- [ ] Create a state and actions in ngrx for general form state
+- [ ] Figure out the way to handle persistence. I can use a separate endpoint, or maybe just store it in a cookie
+- [ ] Create basic db tables and setup connection for dev/prod environment 
+- [ ] Connect to db
+- [ ] Write backend api endpoints 
+  - [ ] Submit Form 
+  - [ ] Logging
+  - [ ] Get a session id (?)
+  - [ ] Get current form state (?)
+- [ ] Integrate frontend with api
+
+Nice to have-s:
+- [ ] Prefetch assets
+- [ ] Figure out a way to store files. Connect s3 
+- [ ] PWA
 
 ## Development server
 
