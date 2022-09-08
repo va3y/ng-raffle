@@ -21,7 +21,7 @@
 - [ ] Create a state and actions in ngrx for general form state
 - [ ] Figure out the way to handle persistence. I can use a separate endpoint, or maybe just store it in a cookie
 - [ ] Create basic db tables and setup connection for dev/prod environment 
-- [ ] Connect to db
+- [ ] Intercept requests with session id header
 - [ ] Write backend api endpoints 
   - [ ] Submit Form 
   - [ ] Logging
@@ -33,6 +33,7 @@ Nice to have-s:
 - [ ] Prefetch assets
 - [ ] Figure out a way to store files. Connect s3 
 - [ ] PWA
+- [ ] Tests
 
 ## Development server
 
