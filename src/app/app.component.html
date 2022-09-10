@@ -1,19 +1,14 @@
-<mat-stepper>
-  <mat-step [stepControl]="emailForm">
-    <form class="mt-14 mx-auto flex flex-col max-w-md" [formGroup]="emailForm">
+<form class="mt-14 mx-auto flex flex-col max-w-md" [formGroup]="form">
+  <mat-stepper>
+    <mat-step>
       <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput required type="email" formControlName="email" />
       </mat-form-field>
 
       <button mat-button matStepperNext>Next</button>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="userInfoForm">
-    <form
-      class="mt-14 mx-auto flex flex-col max-w-md"
-      [formGroup]="userInfoForm"
-    >
+    </mat-step>
+    <mat-step [stepControl]="form">
       <mat-form-field appearance="fill">
         <mat-label>First name</mat-label>
         <input matInput type="text" formControlName="firstName" />
@@ -33,16 +28,15 @@
       </mat-form-field>
 
       <button mat-button matStepperNext>Next</button>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="fileForm">
-    <form class="mt-14 mx-auto flex flex-col max-w-md" [formGroup]="fileForm">
+    </mat-step>
+    <mat-step [stepControl]="form">
       Your file goes here:
-      <input type="file" formControlName="file" />
+      <input type="file" formControlName="profilePhoto" />
 
       <button mat-button matStepperNext>Submit</button>
-    </form>
-  </mat-step>
-</mat-stepper>
+    </mat-step>
+  </mat-stepper>
+</form>
 
+{{ form.getRawValue() | json }}
 <router-outlet></router-outlet>

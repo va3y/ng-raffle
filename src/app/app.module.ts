@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatNativeDateModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

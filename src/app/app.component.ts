@@ -1,32 +1,46 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import { GetFormResponse } from 'api/get-form';
+import { debounceTime, Observable } from 'rxjs';
 
-const THE_MINIMUM_TIME_POSSIBLE_BACKEND_CAN_HANDLE_MS = 1000;
+const THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS = 1000;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  emailForm = this.fb.group({
+  form = this.fb.group<GetFormResponse>({
     email: '',
-  });
-  userInfoForm = this.fb.group({
     firstName: '',
     familyName: '',
-  });
-  fileForm = this.fb.group({
-    file: null,
+    gender: '',
+    dateOfBirth: '',
+    profilePhoto: '',
   });
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
-    this.emailForm.valueChanges
-      .pipe(debounceTime(THE_MINIMUM_TIME_POSSIBLE_BACKEND_CAN_HANDLE_MS))
+  constructor(private fb: FormBuilder, http: HttpClient) {
+    http.get<GetFormResponse>('get-form').subscribe({
+      next: (res) => {
+        this.form.setValue(res);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+
+    this.form.valueChanges
+      .pipe(debounceTime(THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS))
       .subscribe((value) => {
-        http.get('/save-form').subscribe((e) => e);
-        console.log('savnin some', value);
+        http.post('save-form', value).subscribe({
+          next: (res) => {
+            console.log('res: ', res);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
       });
   }
 }
