@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model RaffleRecord {
+  id            Int    @id @default(autoincrement())
+  userSessionId String @unique
+
+  email        String
+  firstName    String
+  familyName   String
+  gender       String
+  dateOfBirth  String
+  profilePhoto String
+  Logs         Logs[]
+}
+
+model Logs {
+  id Int @id @default(autoincrement())
+
+  actionType     String
+  timestamp      DateTime     @updatedAt
+  raffleRecord   RaffleRecord @relation(fields: [raffleRecordId], references: [userSessionId])
+  raffleRecordId String
+}
