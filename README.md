@@ -4,28 +4,33 @@
 
 * The db is hosted by planetscale, connection in dev is done via secrets
 * The simple backend is done by serverless functions on Vercel
-* NgRx is used for state management, including @ngrx/data extension
 * The components are implemented as standalone to cut boilerplate code
 
 ## Todo 
 
 - [x] Create a form template
-- [ ] Create a state and actions in ngrx for general form state
-- [ ] Figure out the way to handle persistence. I can use a separate endpoint, or maybe just store it in a cookie
-- [ ] Create basic db tables and setup connection for dev/prod environment 
-- [ ] Intercept requests with session id header
-- [ ] Write backend api endpoints 
-  - [ ] Submit Form 
-  - [ ] Logging
-  - [ ] Get a session id (?)
-  - [ ] Get current form state (?)
+- [x] Figure out the way to handle persistence. I can use a separate endpoint, or maybe just store it in a cookie
+- [x] Create basic db tables and setup connection for dev/prod environment 
+- [x] Intercept requests with session id header
+- [x] Write backend api endpoints 
+  - [x] Submit Form 
+  - [x] Logging
+  - [ ] ~~Get a session id (?)~~
+  - [x] Get current form state (?)
 - [ ] Integrate frontend with api
+- [ ] Validation
+- [ ] Show total number of application and the chance to win
+- [ ] Fancy layout
+- [ ] Create form in backend by schema
+- [ ] Decompose components
+- [ ] Code cleanup
 
 Nice to have-s:
 - [ ] Prefetch assets
 - [ ] Figure out a way to store files. Connect s3 
 - [ ] PWA
 - [ ] Tests
+- [ ] Move off the material ui
 - [ ] i18n supoprt. So far, all the text content is in English string literals
 - [ ] If the form grows in complexity, moving the form building to backend must be a good idea
 

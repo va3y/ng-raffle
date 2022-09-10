@@ -1,25 +1,39 @@
 import { VercelApiHandler } from '@vercel/node';
-import { withAddCookie, withAllowedMethod } from '../api-utils';
+import { prisma } from '../api-utils/db';
+import {
+  SESSION_ID_COOKIE_NAME,
+  withAddCookie,
+} from '../api-utils/withAddCookie';
+import { withAllowedMethod } from '../api-utils/withAllowedMethod';
+import { RaffleRecord } from '@prisma/client';
 
-export interface GetFormResponse {
-  email: string;
-  firstName: string;
-  familyName: string;
-  gender: string;
-  dateOfBirth: string;
-  profilePhoto: string;
-}
+export type RaffleRecordDto = Omit<RaffleRecord, 'id' | 'userSessionId'>;
 
-const handler: VercelApiHandler = (req, res) => {
-  res.status(200).json({
-    email: 'valerih333@gmail.com',
-    firstName: 'Valery',
-    familyName: 'Ivanov',
-    gender: 'male',
-    dateOfBirth: '2022-09-10T13:00:29.960Z',
-    profilePhoto:
-      'https://www.camera-rumors.com/wp-content/uploads/2018/02/sony-a7iii-sample-image-3.jpg',
+const handler: VercelApiHandler = async (req, res) => {
+  if (!req.cookies[SESSION_ID_COOKIE_NAME]) {
+    // await prisma.raffleRecord.create({ data: { userSessionId:  } });
+    return;
+  }
+
+  const record: RaffleRecordDto = await prisma.raffleRecord.upsert({
+    create: {
+      userSessionId: req.cookies[SESSION_ID_COOKIE_NAME],
+    },
+    where: {
+      userSessionId: req.cookies[SESSION_ID_COOKIE_NAME],
+    },
+    update: {},
+    select: {
+      email: true,
+      firstName: true,
+      familyName: true,
+      gender: true,
+      dateOfBirth: true,
+      profilePhoto: true,
+    },
   });
+
+  res.status(200).json(record);
 };
 
 export default withAddCookie(withAllowedMethod('GET', handler));

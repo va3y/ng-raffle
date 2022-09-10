@@ -16,20 +16,27 @@ model RaffleRecord {
   id            Int    @id @default(autoincrement())
   userSessionId String @unique
 
-  email        String
-  firstName    String
-  familyName   String
-  gender       String
-  dateOfBirth  String
-  profilePhoto String
-  Logs         Logs[]
+  email        String?
+  firstName    String?
+  familyName   String?
+  gender       String?
+  dateOfBirth  String?
+  profilePhoto String?
+  Logs         Log[]
 }
 
-model Logs {
+model Log {
   id Int @id @default(autoincrement())
 
-  actionType     String
-  timestamp      DateTime     @updatedAt
-  raffleRecord   RaffleRecord @relation(fields: [raffleRecordId], references: [userSessionId])
-  raffleRecordId String
+  message       String
+  level         LogLevel
+  timestamp     DateTime      @updatedAt
+  raffleRecord  RaffleRecord? @relation(fields: [userSessionId], references: [userSessionId])
+  userSessionId String?
+}
+
+enum LogLevel {
+  Error
+  Warning
+  Info
 }

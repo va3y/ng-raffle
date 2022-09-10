@@ -1,17 +1,24 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { GetFormResponse } from 'api/get-form';
-import { debounceTime, Observable } from 'rxjs';
+import { RaffleRecordDto } from 'api/get-form';
+import { debounceTime, Subscription } from 'rxjs';
+import { LoggingService } from './logging.service';
 
-const THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS = 1000;
+const THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS = 25;
+
+export enum SyncStatus {
+  Synced = 'synced',
+  Loading = 'loading',
+  Error = 'error',
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
-  form = this.fb.group<GetFormResponse>({
+export class AppComponent implements OnInit {
+  form = this.fb.group<RaffleRecordDto>({
     email: '',
     firstName: '',
     familyName: '',
@@ -20,25 +27,42 @@ export class AppComponent {
     profilePhoto: '',
   });
 
-  constructor(private fb: FormBuilder, http: HttpClient) {
-    http.get<GetFormResponse>('get-form').subscribe({
+  syncStatus = SyncStatus.Loading;
+  pendingRequest?: Subscription;
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private logging: LoggingService
+  ) {}
+
+  ngOnInit() {
+    this.logging.info('Main page visit');
+
+    this.http.get<RaffleRecordDto>('get-form').subscribe({
       next: (res) => {
-        this.form.setValue(res);
+        this.form.setValue(res, { emitEvent: false });
+        this.syncStatus = SyncStatus.Synced;
       },
       error: (err) => {
-        console.log(err);
+        this.logging.info('Error when fetching initial form data');
+        this.syncStatus = SyncStatus.Error;
       },
     });
 
     this.form.valueChanges
       .pipe(debounceTime(THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS))
       .subscribe((value) => {
-        http.post('save-form', value).subscribe({
+        this.syncStatus = SyncStatus.Loading;
+        this.pendingRequest?.unsubscribe();
+
+        this.pendingRequest = this.http.post('save-form', value).subscribe({
           next: (res) => {
-            console.log('res: ', res);
+            this.syncStatus = SyncStatus.Synced;
           },
           error: (err) => {
-            console.log(err);
+            this.logging.info('Error when syncing form data');
+            this.syncStatus = SyncStatus.Error;
           },
         });
       });
