@@ -34,6 +34,7 @@ export class RaffleFormService {
   loadingStatus = new BehaviorSubject(FormStatus.Loading);
   syncStatus = new BehaviorSubject(SyncStatus.Untouched);
   schema: Schema = { steps: [] };
+  totalSubmissions: number | null = null;
 
   private pendingRequest?: Subscription;
 
@@ -48,6 +49,7 @@ export class RaffleFormService {
     this.loadingStatus.next(FormStatus.Loading);
     return this.http.post('submit-form', this.form.getRawValue()).subscribe({
       complete: () => {
+        if (typeof this.totalSubmissions === 'number') this.totalSubmissions++;
         this.loadingStatus.next(FormStatus.Submitted);
       },
       error: () => {
@@ -63,6 +65,7 @@ export class RaffleFormService {
   getForm() {
     return this.http.get<GetFormResponse>('get-form').pipe(
       tap((res) => {
+        this.totalSubmissions = res.recordsCount;
         this.loadingStatus.next(
           res.status === RaffleRecordStatus.Filling
             ? FormStatus.Filling

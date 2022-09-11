@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formService.getForm().subscribe(() => {});
     this.formService.loadingStatus.subscribe((newStatus) => {
-      this.setComponent(
+      const component = this.setComponent(
         {
           [FormStatus.Filling]: RaffleFormComponent,
           [FormStatus.Loading]: LoaderComponent,
@@ -35,6 +35,11 @@ export class AppComponent implements OnInit, OnDestroy {
           [FormStatus.Error]: NotAvailableComponent,
         }[newStatus]
       );
+
+      if (component?.instance instanceof SuccessComponent) {
+        component.instance.totalSubmssions =
+          this.formService.totalSubmissions || 0;
+      }
     });
   }
 
@@ -44,6 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private setComponent<C>(component: Type<C>) {
     this.currentComponent?.viewContainerRef.clear();
-    this.currentComponent?.viewContainerRef.createComponent(component);
+    return this.currentComponent?.viewContainerRef.createComponent(component);
   }
 }
