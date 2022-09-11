@@ -6,7 +6,7 @@ export enum EFieldType {
 }
 
 interface BaseField {
-  value: string;
+  value: string | null;
   label: string;
   code: string;
   placeholder?: string;
@@ -83,7 +83,7 @@ export const SCHEMA: Schema = {
         {
           code: 'gender',
           fieldType: EFieldType.Radio,
-          value: '',
+          value: null,
           label: 'Gender',
           options: [
             {

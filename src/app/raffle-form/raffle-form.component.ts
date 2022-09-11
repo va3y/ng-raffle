@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { RaffleFormService } from './raffle-form.service';
 
 export enum SyncStatus {
@@ -13,16 +12,6 @@ export enum SyncStatus {
   templateUrl: './raffle-form.component.html',
   styleUrls: ['./raffle-form.component.css'],
 })
-export class RaffleFormComponent implements OnInit, OnDestroy {
-  getFormRequest?: Subscription;
-
+export class RaffleFormComponent {
   constructor(public formService: RaffleFormService) {}
-
-  ngOnInit() {
-    this.getFormRequest = this.formService.getForm().subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.getFormRequest?.unsubscribe();
-  }
 }

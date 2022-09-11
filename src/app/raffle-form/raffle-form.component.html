@@ -1,31 +1,29 @@
-<div *ngIf="!formService.formLoaded; else formIsLoaded">
-  <mat-spinner></mat-spinner>
-</div>
-<ng-template #formIsLoaded>
-  <mat-card>
-    <form>
-      <form [formGroup]="formService.form">
-        <mat-stepper>
-          <mat-step *ngFor="let step of formService.schema.steps">
-            <ng-template matStepLabel>{{ step.name }}</ng-template>
-            <mat-grid-list cols="2" rowHeight="80" gutterSize="8">
-              <mat-grid-tile *ngFor="let field of step.fields">
-                <div>
-                  <app-raffle-form-field
-                    [form]="formService.form"
-                    [field]="field"
-                  ></app-raffle-form-field>
-                </div>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </mat-step>
-        </mat-stepper>
-      </form>
+<mat-card>
+  <form class="form">
+    <form [formGroup]="formService.form">
+      <mat-stepper>
+        <mat-step *ngFor="let step of formService.schema.steps">
+          <ng-template matStepLabel>{{ step.name }}</ng-template>
+          <mat-grid-list cols="2" rowHeight="80" gutterSize="8">
+            <mat-grid-tile *ngFor="let field of step.fields">
+              <app-raffle-form-field
+                [form]="formService.form"
+                [field]="field"
+              ></app-raffle-form-field>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          You are done! Submit the form, when you are ready.
+          <button mat-button (click)="formService.submitForm()">Submit</button>
+        </mat-step>
+      </mat-stepper>
     </form>
-    <mat-card-footer>
-      <app-loading-indicator
-        [status]="formService.syncStatus"
-      ></app-loading-indicator>
-    </mat-card-footer>
-  </mat-card>
-</ng-template>
+  </form>
+  <mat-card-footer>
+    <app-loading-indicator
+      [status]="formService.syncStatus"
+    ></app-loading-indicator>
+  </mat-card-footer>
+</mat-card>

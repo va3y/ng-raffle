@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RaffleRecordStatus } from '@prisma/client';
 import { Schema } from 'api-utils/formSchema';
+import { GetFormResponse } from 'api/get-form';
 import { debounceTime, Subscription, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggingService } from '../logging.service';
@@ -17,6 +19,7 @@ export class RaffleFormService {
   form: FormGroup = this.fb.group({});
   formLoaded = false;
   syncStatus = SyncStatus.Loading;
+  submitStatus: RaffleRecordStatus = RaffleRecordStatus.Filling;
   schema: Schema = { steps: [] };
 
   private pendingRequest?: Subscription;
@@ -30,15 +33,27 @@ export class RaffleFormService {
 
   submitForm() {
     this.formLoaded = false;
-    return this.http.post('submit-form', this.form.getRawValue());
+    return this.http.post('submit-form', this.form.getRawValue()).subscribe({
+      complete: () => {
+        this.formLoaded = true;
+      },
+      error: () => {
+        this.snackBar.open(
+          'Failed to fetch the data. Try again later',
+          'Close'
+        );
+        this.syncStatus = SyncStatus.Error;
+      },
+    });
   }
 
   getForm() {
-    return this.http.get<Schema>('get-form').pipe(
+    return this.http.get<GetFormResponse>('get-form').pipe(
       tap((res) => {
         this.syncStatus = SyncStatus.Synced;
         this.formLoaded = true;
-        this.schema = res;
+        this.schema = res.schema;
+        this.submitStatus = res.status;
         this.form = this.fb.group(fieldsFromSchema(this.schema));
 
         this.form.valueChanges
@@ -80,8 +95,8 @@ export class RaffleFormService {
   }
 }
 
-function fieldsFromSchema(schema: Schema): Record<string, string> {
-  const fields: Record<string, string> = {};
+function fieldsFromSchema(schema: Schema) {
+  const fields: Record<string, string | null> = {};
 
   for (const step of schema.steps) {
     for (const field of step.fields) {

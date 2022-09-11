@@ -8,17 +8,11 @@ import {
 import { RaffleRecordStatus } from '@prisma/client';
 
 const handler: VercelApiHandler = async (req, res) => {
-  const [submissionsCount] = await Promise.all([
-    prisma.raffleRecord.count({
-      where: { userSessionId: req.cookies[SESSION_ID_COOKIE_NAME] },
-    }),
-    prisma.raffleRecord.update({
-      where: { userSessionId: req.cookies[SESSION_ID_COOKIE_NAME] },
-      data: { status: RaffleRecordStatus.Submitted },
-    }),
-  ]);
-
-  res.status(200).json({ submissionsCount });
+  await prisma.raffleRecord.update({
+    where: { userSessionId: req.cookies[SESSION_ID_COOKIE_NAME] },
+    data: { status: RaffleRecordStatus.Submitted },
+  }),
+    res.status(200).json({});
 };
 
 export default withAddCookie(withAllowedMethod('POST', handler));
