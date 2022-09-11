@@ -1,13 +1,6 @@
 <app-header></app-header>
 <mat-grid-list cols="1" rowHeight="600px">
   <mat-grid-tile>
-    <mat-spinner
-      *ngIf="!formService.formLoaded; else formIsLoaded"
-    ></mat-spinner>
-    <ng-template #formIsLoaded>
-      <app-raffle-form *ngIf="formService.formLoaded"></app-raffle-form>
-    </ng-template>
+    <ng-template appCurrentComponent></ng-template>
   </mat-grid-tile>
 </mat-grid-list>
-
-<router-outlet></router-outlet>

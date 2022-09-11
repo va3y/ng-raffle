@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RaffleRecordStatus } from '@prisma/client';
 import { Schema } from 'api-utils/formSchema';
 import { GetFormResponse } from 'api/get-form';
-import { debounceTime, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, Subscription, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggingService } from '../logging.service';
 import { SyncStatus } from './raffle-form.component';
@@ -17,7 +17,7 @@ const THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS = 100;
 })
 export class RaffleFormService {
   form: FormGroup = this.fb.group({});
-  formLoaded = false;
+  formLoaded = new BehaviorSubject(false);
   syncStatus = SyncStatus.Loading;
   submitStatus: RaffleRecordStatus = RaffleRecordStatus.Filling;
   schema: Schema = { steps: [] };
@@ -32,10 +32,11 @@ export class RaffleFormService {
   ) {}
 
   submitForm() {
-    this.formLoaded = false;
+    this.formLoaded.next(false);
     return this.http.post('submit-form', this.form.getRawValue()).subscribe({
       complete: () => {
-        this.formLoaded = true;
+        this.formLoaded.next(true);
+        this.submitStatus = RaffleRecordStatus.Submitted;
       },
       error: () => {
         this.snackBar.open(
@@ -51,7 +52,7 @@ export class RaffleFormService {
     return this.http.get<GetFormResponse>('get-form').pipe(
       tap((res) => {
         this.syncStatus = SyncStatus.Synced;
-        this.formLoaded = true;
+        this.formLoaded.next(true);
         this.schema = res.schema;
         this.submitStatus = res.status;
         this.form = this.fb.group(fieldsFromSchema(this.schema));

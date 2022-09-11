@@ -26,6 +26,9 @@ import { RaffleFormComponent } from './raffle-form/raffle-form.component';
 import { HeaderComponent } from './header/header.component';
 import { FaffleFormFieldComponent } from './raffle-form/raffle-form-field/raffle-form-field.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { CurrentComponentDirective } from './current-component.directive';
+import { LoaderComponent } from './raffle-form/loader/loader.component';
+import { SuccessComponent } from './raffle-form/success/success.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { MatRadioModule } from '@angular/material/radio';
     RaffleFormComponent,
     HeaderComponent,
     FaffleFormFieldComponent,
+    CurrentComponentDirective,
+    LoaderComponent,
+    SuccessComponent,
   ],
   imports: [
     BrowserModule,
