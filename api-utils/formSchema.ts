@@ -1,3 +1,5 @@
+import { Gender } from '@prisma/client';
+
 export enum EFieldType {
   Text = 'text',
   Radio = 'radio',
@@ -81,27 +83,27 @@ export const SCHEMA: Schema = {
           placeholder: '',
         },
         {
+          code: 'dateOfBirth',
+          fieldType: EFieldType.Date,
+          value: '',
+          label: 'Date of birth',
+          placeholder: 'mm/dd/yyyy',
+        },
+        {
           code: 'gender',
           fieldType: EFieldType.Radio,
           value: null,
           label: 'Gender',
           options: [
             {
-              value: 'male',
+              value: Gender.Male,
               displayValue: 'Male',
             },
             {
-              value: 'female',
+              value: Gender.Female,
               displayValue: 'Female',
             },
           ],
-        },
-        {
-          code: 'dateOfBirth',
-          fieldType: EFieldType.Date,
-          value: '',
-          label: 'Date of birth',
-          placeholder: 'mm/dd/yyyy',
         },
       ],
     },

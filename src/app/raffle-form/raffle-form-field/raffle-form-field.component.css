@@ -1,3 +1,14 @@
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
+.mat-radio-group {
+  display: flex;
+  column-gap: 24px;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.field {
+  min-width: 200px;
 }

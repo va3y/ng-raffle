@@ -1,0 +1,8 @@
+.current-component {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  min-height: 400px;
+  padding: 12px;
+}

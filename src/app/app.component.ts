@@ -14,6 +14,7 @@ import { SuccessComponent } from './raffle-form/success/success.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(CurrentComponentDirective, { static: true })
