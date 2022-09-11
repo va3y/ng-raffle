@@ -1,10 +1,32 @@
 # NgRaffle
 
+Live: https://ng-raffle.vercel.app/
+
+## Development server
+
+To run the app with the dev server, Vercel CLI is needed:
+
+```bash
+npm i -g vercel
+npm i
+
+npm run vstart # runs api + frontend
+npm run start # runs only frontend
+```
+
+## Environment variables
+
+To run the api locally the `DATABASE_URL` environment variable must be set. This is a secret for db connection.
+
+
 ## Features
 
-* The db is hosted by planetscale, connection in dev is done via secrets
-* The simple backend is done by serverless functions on Vercel
-* The components are implemented as standalone to cut boilerplate code
+* Optimistic UI. The data is saved as you type 
+* The session id is stored in a cookie
+* A simple logging service is implemented with a simple api call
+* The db is hosted by Planetscale, connection in dev is done via secret env keys
+* The basic backend is done by serverless functions on Vercel
+
 
 ## Todo 
 
@@ -19,11 +41,11 @@
   - [x] Get current form state (?)
 - [x] Integrate frontend with api
 - [ ] Validation
-- [ ] Show total number of application and the chance to win
-- [ ] Fancy layout
+- [x] Show total number of application and the chance to win
+- [x] A more fancy layout
 - [x] Create form in backend by schema
 - [x] Decompose components
-- [ ] Code cleanup
+- [x] Code cleanup
 
 Nice to have-s:
 - [ ] Prefetch assets
@@ -32,28 +54,4 @@ Nice to have-s:
 - [ ] Tests
 - [ ] Move off the material ui
 - [ ] i18n supoprt. So far, all the text content is in English string literals
-- [ ] If the form grows in complexity, moving the form building to backend must be a good idea
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- [x] If the form grows in complexity, moving the form building to backend must be a good idea
