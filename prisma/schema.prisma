@@ -16,10 +16,12 @@ model RaffleRecord {
   email        String?
   firstName    String?
   familyName   String?
-  gender       String?
+  gender       Gender?
   dateOfBirth  String?
   profilePhoto String?
-  Logs         Log[]
+
+  status RaffleRecordStatus @default(Filling)
+  Logs   Log[]
 }
 
 model Log {
@@ -27,7 +29,7 @@ model Log {
 
   message       String
   level         LogLevel
-  timestamp     DateTime      @updatedAt
+  timestamp     DateTime      @default(now())
   raffleRecord  RaffleRecord? @relation(fields: [userSessionId], references: [userSessionId])
   userSessionId String?
 }
@@ -36,4 +38,14 @@ enum LogLevel {
   Error
   Warning
   Info
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum RaffleRecordStatus {
+  Submitted
+  Filling
 }

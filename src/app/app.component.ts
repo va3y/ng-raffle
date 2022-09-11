@@ -1,10 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { RaffleRecordDto } from 'api/get-form';
-import { debounceTime, Subscription } from 'rxjs';
-import { LoggingService } from './logging.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

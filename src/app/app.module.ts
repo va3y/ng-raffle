@@ -24,6 +24,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RaffleFormComponent } from './raffle-form/raffle-form.component';
 import { HeaderComponent } from './header/header.component';
+import { FaffleFormFieldComponent } from './raffle-form/raffle-form-field/raffle-form-field.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { HeaderComponent } from './header/header.component';
     LoadingIndicatorComponent,
     RaffleFormComponent,
     HeaderComponent,
+    FaffleFormFieldComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +54,7 @@ import { HeaderComponent } from './header/header.component';
     MatCardModule,
     MatProgressBarModule,
     MatSnackBarModule,
+    MatRadioModule,
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],

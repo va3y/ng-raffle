@@ -13,7 +13,7 @@ export class LoadingIndicatorComponent {
   get statusText() {
     return {
       [SyncStatus.Loading]: 'Saving...',
-      [SyncStatus.Synced]: 'The data is saved',
+      [SyncStatus.Synced]: 'Your data is saved',
       [SyncStatus.Error]: 'Data failed to save',
     }[this.status];
   }

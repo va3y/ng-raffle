@@ -5,17 +5,29 @@ import {
   withAddCookie,
 } from '../api-utils/withAddCookie';
 import { withAllowedMethod } from '../api-utils/withAllowedMethod';
-import type { RaffleRecord } from '@prisma/client';
+import { RaffleRecord } from '@prisma/client';
+import { SCHEMA, Schema } from '../api-utils/formSchema';
 
 export type RaffleRecordDto = Omit<RaffleRecord, 'id' | 'userSessionId'>;
 
-const handler: VercelApiHandler = async (req, res) => {
-  if (!req.cookies[SESSION_ID_COOKIE_NAME]) {
-    // await prisma.raffleRecord.create({ data: { userSessionId:  } });
-    return;
+function populateSchemaInitialValues(
+  schema: Schema,
+  initialValues: RaffleRecordDto
+) {
+  for (const step of schema.steps) {
+    for (const field of step.fields) {
+      const code = field.code as keyof RaffleRecordDto;
+      if (initialValues[code]) {
+        field.value = initialValues[code] || '';
+      }
+    }
   }
 
-  const record: RaffleRecordDto = await prisma.raffleRecord.upsert({
+  return schema;
+}
+
+const handler: VercelApiHandler = async (req, res) => {
+  const response = await prisma.raffleRecord.upsert({
     create: {
       userSessionId: req.cookies[SESSION_ID_COOKIE_NAME],
     },
@@ -30,10 +42,11 @@ const handler: VercelApiHandler = async (req, res) => {
       gender: true,
       dateOfBirth: true,
       profilePhoto: true,
+      status: true,
     },
   });
 
-  res.status(200).json(record);
+  res.status(200).json(populateSchemaInitialValues(SCHEMA, response));
 };
 
 export default withAddCookie(withAllowedMethod('GET', handler));

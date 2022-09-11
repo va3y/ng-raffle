@@ -13,8 +13,8 @@ export class LoggingService {
     this.http.post('log', { level: logLevel, message } as LogDto).subscribe();
   }
 
-  error(message: string, error?: Error) {
-    this.apiCall(LogLevel.Error, message + JSON.stringify(error));
+  error(message: string) {
+    this.apiCall(LogLevel.Error, message);
   }
 
   warn(message: string) {
