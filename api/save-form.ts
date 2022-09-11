@@ -1,4 +1,4 @@
-import { VercelApiHandler } from '@vercel/node';
+import type { VercelApiHandler } from '@vercel/node';
 import { prisma } from '../api-utils/db';
 import { withAllowedMethod } from '../api-utils/withAllowedMethod';
 import {

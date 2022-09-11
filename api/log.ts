@@ -1,6 +1,6 @@
-import { Log } from '@prisma/client';
-import { VercelApiHandler } from '@vercel/node';
-import { SESSION_ID_COOKIE_NAME } from 'api-utils/withAddCookie';
+import type { Log } from '@prisma/client';
+import type { VercelApiHandler } from '@vercel/node';
+import { SESSION_ID_COOKIE_NAME } from '../api-utils/withAddCookie';
 import { prisma } from '../api-utils/db';
 import { withAllowedMethod } from '../api-utils/withAllowedMethod';
 

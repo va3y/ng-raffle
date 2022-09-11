@@ -1,11 +1,11 @@
-import { VercelApiHandler } from '@vercel/node';
+import type { VercelApiHandler } from '@vercel/node';
 import { prisma } from '../api-utils/db';
 import {
   SESSION_ID_COOKIE_NAME,
   withAddCookie,
 } from '../api-utils/withAddCookie';
 import { withAllowedMethod } from '../api-utils/withAllowedMethod';
-import { RaffleRecord } from '@prisma/client';
+import type { RaffleRecord } from '@prisma/client';
 
 export type RaffleRecordDto = Omit<RaffleRecord, 'id' | 'userSessionId'>;
 

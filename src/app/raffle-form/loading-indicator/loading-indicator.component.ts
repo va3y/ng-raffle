@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { SyncStatus } from '../app.component';
+import { SyncStatus } from '../raffle-form.component';
 
 @Component({
   selector: 'app-loading-indicator[status]',

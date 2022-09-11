@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from './raffle-form/loading-indicator/loading-indicator.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,9 +21,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RaffleFormComponent } from './raffle-form/raffle-form.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
-  declarations: [AppComponent, LoadingIndicatorComponent],
+  declarations: [
+    AppComponent,
+    LoadingIndicatorComponent,
+    RaffleFormComponent,
+    HeaderComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -42,6 +50,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatToolbarModule,
     MatCardModule,
     MatProgressBarModule,
+    MatSnackBarModule,
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],

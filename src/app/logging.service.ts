@@ -10,11 +10,11 @@ export class LoggingService {
   constructor(private http: HttpClient) {}
 
   private apiCall(logLevel: LogLevel, message: string) {
-    this.http.post('log', { level: logLevel, message } as LogDto);
+    this.http.post('log', { level: logLevel, message } as LogDto).subscribe();
   }
 
-  error(message: string) {
-    this.apiCall(LogLevel.Error, message);
+  error(message: string, error?: Error) {
+    this.apiCall(LogLevel.Error, message + JSON.stringify(error));
   }
 
   warn(message: string) {

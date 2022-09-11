@@ -1,4 +1,4 @@
-import { VercelApiHandler } from '@vercel/node';
+import type { VercelApiHandler } from '@vercel/node';
 import { v4 as uuid } from 'uuid';
 
 export const SESSION_ID_COOKIE_NAME = 'session-id';

@@ -1,4 +1,4 @@
-import { VercelApiHandler } from '@vercel/node';
+import type { VercelApiHandler } from '@vercel/node';
 
 export function withAllowedMethod(method: string, handler: VercelApiHandler) {
   const returnedFn: VercelApiHandler = (req, res) => {
