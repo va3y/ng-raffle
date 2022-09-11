@@ -8,18 +8,31 @@ import { GetFormResponse } from 'api/get-form';
 import { BehaviorSubject, debounceTime, Subscription, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggingService } from '../logging.service';
-import { SyncStatus } from './raffle-form.component';
+import { fieldsFromSchema } from './fieldsFromSchema';
 
 const THE_MINIMUM_TIME_BACKEND_CAN_HANDLE_MS = 100;
+
+export enum SyncStatus {
+  Synced = 'synced',
+  Loading = 'loading',
+  Error = 'error',
+  Untouched = 'untouched',
+}
+
+export enum FormStatus {
+  Loading = 'loading',
+  Filling = 'filling',
+  Submitted = 'submitted',
+  Error = 'error',
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class RaffleFormService {
   form: FormGroup = this.fb.group({});
-  formLoaded = new BehaviorSubject(false);
-  syncStatus = SyncStatus.Loading;
-  submitStatus: RaffleRecordStatus = RaffleRecordStatus.Filling;
+  loadingStatus = new BehaviorSubject(FormStatus.Loading);
+  syncStatus = new BehaviorSubject(SyncStatus.Untouched);
   schema: Schema = { steps: [] };
 
   private pendingRequest?: Subscription;
@@ -32,18 +45,17 @@ export class RaffleFormService {
   ) {}
 
   submitForm() {
-    this.formLoaded.next(false);
+    this.loadingStatus.next(FormStatus.Loading);
     return this.http.post('submit-form', this.form.getRawValue()).subscribe({
       complete: () => {
-        this.formLoaded.next(true);
-        this.submitStatus = RaffleRecordStatus.Submitted;
+        this.loadingStatus.next(FormStatus.Submitted);
       },
       error: () => {
         this.snackBar.open(
           'Failed to fetch the data. Try again later',
           'Close'
         );
-        this.syncStatus = SyncStatus.Error;
+        this.loadingStatus.next(FormStatus.Error);
       },
     });
   }
@@ -51,10 +63,12 @@ export class RaffleFormService {
   getForm() {
     return this.http.get<GetFormResponse>('get-form').pipe(
       tap((res) => {
-        this.syncStatus = SyncStatus.Synced;
-        this.formLoaded.next(true);
+        this.loadingStatus.next(
+          res.status === RaffleRecordStatus.Filling
+            ? FormStatus.Filling
+            : FormStatus.Submitted
+        );
         this.schema = res.schema;
-        this.submitStatus = res.status;
         this.form = this.fb.group(fieldsFromSchema(this.schema));
 
         this.form.valueChanges
@@ -63,7 +77,7 @@ export class RaffleFormService {
             this.saveForm(value);
           });
 
-        return res;
+        return 1;
       }),
       catchError((err) => {
         this.logging.error('Error when fetching initial form data');
@@ -71,7 +85,7 @@ export class RaffleFormService {
           'Failed to fetch the data. Try again later',
           'Close'
         );
-        this.syncStatus = SyncStatus.Error;
+        this.loadingStatus.next(FormStatus.Error);
 
         return err;
       })
@@ -79,31 +93,19 @@ export class RaffleFormService {
   }
 
   private saveForm(value: Schema) {
-    this.syncStatus = SyncStatus.Loading;
+    this.syncStatus.next(SyncStatus.Loading);
     this.pendingRequest?.unsubscribe();
 
     this.pendingRequest = this.http.post('save-form', value).subscribe({
       next: (res) => {
-        this.syncStatus = SyncStatus.Synced;
+        this.syncStatus.next(SyncStatus.Synced);
       },
       error: (error) => {
         this.logging.error('Error when syncing form data');
         this.snackBar.open('Failed to refresh the data', 'Close');
 
-        this.syncStatus = SyncStatus.Error;
+        this.syncStatus.next(SyncStatus.Error);
       },
     });
   }
-}
-
-function fieldsFromSchema(schema: Schema) {
-  const fields: Record<string, string | null> = {};
-
-  for (const step of schema.steps) {
-    for (const field of step.fields) {
-      fields[field.code] = field.value;
-    }
-  }
-
-  return fields;
 }

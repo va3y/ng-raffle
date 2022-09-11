@@ -29,6 +29,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { CurrentComponentDirective } from './current-component.directive';
 import { LoaderComponent } from './raffle-form/loader/loader.component';
 import { SuccessComponent } from './raffle-form/success/success.component';
+import { NotAvailableComponent } from './raffle-form/not-available/not-available.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SuccessComponent } from './raffle-form/success/success.component';
     CurrentComponentDirective,
     LoaderComponent,
     SuccessComponent,
+    NotAvailableComponent,
   ],
   imports: [
     BrowserModule,

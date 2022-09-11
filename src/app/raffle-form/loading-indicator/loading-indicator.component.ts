@@ -1,21 +1,28 @@
 import { Component, Input } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
-import { SyncStatus } from '../raffle-form.component';
+import { SyncStatus } from '../raffle-form.service';
 
 @Component({
   selector: 'app-loading-indicator[status]',
   templateUrl: './loading-indicator.component.html',
 })
 export class LoadingIndicatorComponent {
-  @Input() status!: SyncStatus;
+  @Input() status!: SyncStatus | null;
 
   get statusText() {
-    return {
-      [SyncStatus.Loading]: 'Saving...',
-      [SyncStatus.Synced]: 'Your data is saved',
-      [SyncStatus.Error]: 'Data failed to save',
-    }[this.status];
+    switch (this.status) {
+      case SyncStatus.Loading:
+        return 'Saving...';
+      default:
+      case SyncStatus.Synced:
+        return 'Your data is saved';
+      case SyncStatus.Untouched:
+        return 'The data is saved automatically';
+      case SyncStatus.Error:
+      case null:
+        return 'Data failed to save';
+    }
   }
 
   get progressSpinnerMode(): ProgressBarMode {
@@ -23,11 +30,15 @@ export class LoadingIndicatorComponent {
   }
 
   get progressColor(): ThemePalette {
-    const colorMap: Record<SyncStatus, ThemePalette> = {
-      [SyncStatus.Error]: 'warn',
-      [SyncStatus.Loading]: 'accent',
-      [SyncStatus.Synced]: 'primary',
-    };
-    return colorMap[this.status];
+    switch (this.status) {
+      case SyncStatus.Loading:
+        return 'accent';
+      default:
+      case SyncStatus.Synced:
+        return 'primary';
+      case SyncStatus.Error:
+      case null:
+        return 'warn';
+    }
   }
 }

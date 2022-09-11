@@ -3,8 +3,13 @@ import { Subscription } from 'rxjs';
 import { Type } from 'src/global';
 import { CurrentComponentDirective } from './current-component.directive';
 import { LoaderComponent } from './raffle-form/loader/loader.component';
+import { NotAvailableComponent } from './raffle-form/not-available/not-available.component';
 import { RaffleFormComponent } from './raffle-form/raffle-form.component';
-import { RaffleFormService } from './raffle-form/raffle-form.service';
+import {
+  FormStatus,
+  RaffleFormService,
+} from './raffle-form/raffle-form.service';
+import { SuccessComponent } from './raffle-form/success/success.component';
 
 @Component({
   selector: 'app-root',
@@ -12,16 +17,23 @@ import { RaffleFormService } from './raffle-form/raffle-form.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(CurrentComponentDirective, { static: true })
-  currentComponent!: CurrentComponentDirective;
+  currentComponent?: CurrentComponentDirective;
 
   getFormRequest?: Subscription;
 
   constructor(public formService: RaffleFormService) {}
 
   ngOnInit() {
-    this.setComponent(LoaderComponent);
-    this.formService.getForm().subscribe(() => {
-      this.setComponent(RaffleFormComponent);
+    this.formService.getForm().subscribe(() => {});
+    this.formService.loadingStatus.subscribe((newStatus) => {
+      this.setComponent(
+        {
+          [FormStatus.Filling]: RaffleFormComponent,
+          [FormStatus.Loading]: LoaderComponent,
+          [FormStatus.Submitted]: SuccessComponent,
+          [FormStatus.Error]: NotAvailableComponent,
+        }[newStatus]
+      );
     });
   }
 
@@ -30,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setComponent<C>(component: Type<C>) {
-    this.currentComponent.viewContainerRef.clear();
-    this.currentComponent.viewContainerRef.createComponent(component);
+    this.currentComponent?.viewContainerRef.clear();
+    this.currentComponent?.viewContainerRef.createComponent(component);
   }
 }

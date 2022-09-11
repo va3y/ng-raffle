@@ -23,7 +23,7 @@
   </form>
   <mat-card-footer>
     <app-loading-indicator
-      [status]="formService.syncStatus"
+      [status]="formService.syncStatus | async"
     ></app-loading-indicator>
   </mat-card-footer>
 </mat-card>
