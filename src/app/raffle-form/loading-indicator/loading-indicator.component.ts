@@ -6,6 +6,7 @@ import { SyncStatus } from '../raffle-form.service';
 @Component({
   selector: 'app-loading-indicator[status]',
   templateUrl: './loading-indicator.component.html',
+  styleUrls: ['./loading-indicator.component.css'],
 })
 export class LoadingIndicatorComponent {
   @Input() status!: SyncStatus | null;

@@ -17,12 +17,12 @@
   - [x] Logging
   - [ ] ~~Get a session id (?)~~
   - [x] Get current form state (?)
-- [ ] Integrate frontend with api
+- [x] Integrate frontend with api
 - [ ] Validation
 - [ ] Show total number of application and the chance to win
 - [ ] Fancy layout
-- [ ] Create form in backend by schema
-- [ ] Decompose components
+- [x] Create form in backend by schema
+- [x] Decompose components
 - [ ] Code cleanup
 
 Nice to have-s:

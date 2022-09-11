@@ -15,8 +15,20 @@
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
-          You are done! Submit the form, when you are ready.
-          <button mat-button (click)="formService.submitForm()">Submit</button>
+          <mat-grid-list cols="1" rowHeight="80" gutterSize="8">
+            <mat-grid-tile>
+              <h3>You are done! Submit the form, when you are ready.</h3>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button
+                color="primary"
+                mat-flat-button
+                (click)="formService.submitForm()"
+              >
+                Submit
+              </button>
+            </mat-grid-tile>
+          </mat-grid-list>
         </mat-step>
       </mat-stepper>
     </form>

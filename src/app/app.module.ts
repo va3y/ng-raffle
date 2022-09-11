@@ -30,6 +30,7 @@ import { CurrentComponentDirective } from './current-component.directive';
 import { LoaderComponent } from './raffle-form/loader/loader.component';
 import { SuccessComponent } from './raffle-form/success/success.component';
 import { NotAvailableComponent } from './raffle-form/not-available/not-available.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { NotAvailableComponent } from './raffle-form/not-available/not-available
     MatProgressBarModule,
     MatSnackBarModule,
     MatRadioModule,
+    MatIconModule,
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
