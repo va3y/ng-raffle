@@ -23,7 +23,8 @@ To run the api locally the `DATABASE_URL` environment variable must be set. This
 
 * Optimistic UI. The data is saved as you type 
 * The session id is stored in a cookie
-* A simple logging service is implemented with a simple api call
+* A simple [logging service](src/app/logging.service.ts) is implemented with a simple api call
+* The form is created dynamically, according to the [schema](api-utils/formSchema.ts)
 * The db is hosted by Planetscale, connection in dev is done via secret env keys
 * The basic backend is done by serverless functions on Vercel
 
